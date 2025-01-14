@@ -1,0 +1,5 @@
+- name: Install latest tooling for PCs
+  hosts: personal_computer
+  roles:
+    - name: rustup
+      become: no
