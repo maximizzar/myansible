@@ -1,0 +1,6 @@
+- name: Build the webvault
+  hosts: local
+  roles:
+    - vaultwarden
+      vars:
+        vaultwarden_build: true
