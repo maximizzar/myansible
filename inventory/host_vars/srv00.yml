@@ -1,0 +1,3 @@
+ansible_roles:
+  - docker
+  - rustup
