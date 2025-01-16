@@ -1,0 +1,8 @@
+---
+galaxy_info:
+  author: maximizzar
+  description: "A role that configures ssh"
+  company: "maximizzar.io"
+  license: "AGPLv3"
+
+dependencies: []

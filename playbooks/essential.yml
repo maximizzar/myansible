@@ -1,0 +1,9 @@
+- name: Essentials Playbook! Setup servers with basic tooling.
+  hosts: all
+  tasks:
+    - name: Test connectivity to all hosts
+      ping:
+
+  roles:
+    - role: sshd
+      when: ansible_host != 'localhost'

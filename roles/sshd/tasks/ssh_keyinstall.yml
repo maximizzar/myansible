@@ -1,0 +1,15 @@
+- name: Attempt SSH connection with private key
+  command: ssh -o BatchMode=yes -o ConnectTimeout=5 -i "{{ ansible_ssh_private_key_file }}" {{ ansible_user }}@{{ inventory_hostname }} echo "SSH key works"
+  register: ssh_test_result
+  ignore_errors: yes
+  when: ssh_key_check.stat.exists
+
+- name: Fallback to password authentication if SSH key fails
+  block:
+    - name: Install public key using password authentication
+      authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: "{{ lookup('file', ansible_ssh_public_key_file) }}"
+      become: yes
+  when: ssh_test_result is not defined or ssh_test_result.rc != 0
