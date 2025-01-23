@@ -1,0 +1,52 @@
+- name: Create Authentik Project directory
+  ansible.builtin.file:
+    path: "{{ authentik_project_dir }}"
+    state: directory
+    mode: '0700'
+
+- name: Download docker-compose.yml
+  get_url:
+    url: https://goauthentik.io/docker-compose.yml
+    dest: "{{ authentik_project_dir }}/docker-compose.yml"
+    mode: '0600'
+
+- name: Create .env file
+  ansible.builtin.file:
+    path: "{{ authentik_project_dir }}/.env"
+    state: touch
+    mode: '0600'
+
+- name: Authentik Install preparation
+  block:
+  - name: Generate PG_PASS
+    ansible.builtin.shell: "openssl rand -base64 36 | tr -d '\n'"
+    register: PG_PASS
+
+  - name: Generate AUTHENTIK_SECRET_KEY
+    ansible.builtin.shell: "openssl rand -base64 60 | tr -d '\n'"
+    register: AUTHENTIK_SECRET_KEY
+
+- name: Write to .env file
+  ansible.builtin.blockinfile:
+    path: "{{ authentik_project_dir }}/.env"
+    block: |
+        PG_PASS={{ PG_PASS.stdout }}
+        AUTHENTIK_SECRET_KEY={{ AUTHENTIK_SECRET_KEY.stdout }}
+
+        AUTHENTIK_EMAIL__HOST={{ AUTHENTIK_EMAIL__HOST }}
+        AUTHENTIK_EMAIL__PORT={{ AUTHENTIK_EMAIL__PORT }}
+
+        # authenticate
+        AUTHENTIK_EMAIL__USERNAME={{ AUTHENTIK_EMAIL__USERNAME }}
+        AUTHENTIK_EMAIL__PASSWORD={{ AUTHENTIK_EMAIL__PASSWORD }}
+        
+        # transport encryption
+        AUTHENTIK_EMAIL__USE_TLS={{ AUTHENTIK_EMAIL__USE_TLS }}
+        AUTHENTIK_EMAIL__USE_SSL={{ AUTHENTIK_EMAIL__USE_SSL }}
+
+        # sender address
+        AUTHENTIK_EMAIL__TIMEOUT={{ AUTHENTIK_EMAIL__TIMEOUT }}
+        AUTHENTIK_EMAIL__FROM={{ AUTHENTIK_EMAIL__FROM }}
+
+        COMPOSE_PORT_HTTP={{ AUTHENTIK_COMPOSE_PORT_HTTP }}
+        COMPOSE_PORT_HTTPS={{ AUTHENTIK_COMPOSE_PORT_HTTPS }}

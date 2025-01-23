@@ -1,0 +1,17 @@
+- name: Check if the .env file exists
+  ansible.builtin.stat:
+    path: "{{ authentik_project_dir }}/.env"
+  register: authentik_dot_env
+
+- name: Install Authentik docker compose Stack
+  include_tasks: install.yml
+  when: not authentik_dot_env.stat.exists
+
+- name: Update Authentik docker compose Stack
+  include_tasks: update.yml
+  when: authentik_dot_env.stat.exists
+
+- name: Ensure Docker Compose services are using the latest images
+  community.docker.docker_compose_v2:
+    project_src: "{{ authentik_project_dir }}"
+    state: present

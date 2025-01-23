@@ -1,0 +1,9 @@
+- name: Download the latest docker-compose.yml if it has changed
+  ansible.builtin.get_url:
+    url: https://goauthentik.io/docker-compose.yml
+    dest: "{{ authentik_project_dir }}/docker-compose.yml"
+    mode: '0600'
+    force: false
+  notify:
+    - Ensure Docker Compose services are using the latest images
+    
