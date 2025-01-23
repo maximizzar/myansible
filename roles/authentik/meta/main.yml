@@ -1,0 +1,8 @@
+---
+galaxy_info:
+  author: maximizzar
+  description: "A role that installs authentik."
+  company: "maximizzar.io"
+  license: "AGPLv3"
+
+dependencies: []
