@@ -1,0 +1,20 @@
+avahi_services:
+  - name: SSH
+    type: _ssh._tcp
+    port: 22
+    txt_records:
+      - description=Secure Shell Access
+
+  - name: SSO 
+    type: _http._tcp
+    port: 80
+    txt_records:
+      - path=/
+      - description=Single sign on
+  
+  - name: SSO
+    type: _https._tcp
+    port: 443
+    txt_records:
+      - path=/
+      - description=Single sign on Secure
