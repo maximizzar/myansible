@@ -1,0 +1,13 @@
+- name: Ensure Avahi service directory exists
+  file:
+    path: /etc/avahi/services
+    state: directory
+    mode: '0755'
+
+- name: Deploy Avahi service files
+  template:
+    src: avahi-service.xml.j2
+    dest: "/etc/avahi/services/{{ item.name | lower | replace(' ', '_') }}.service"
+    mode: '0644'
+  loop: "{{ avahi_services }}"
+  notify: Restart Avahi

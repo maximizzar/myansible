@@ -1,0 +1,9 @@
+---
+galaxy_info:
+  author: maximizzar
+  description: "A role that sets the avahi daemon."
+  company: "maximizzar.io"
+  license: "AGPLv3"
+
+become: true
+dependencies: []

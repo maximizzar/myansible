@@ -1,0 +1,19 @@
+- name: Install Avahi Daemon
+  ansible.builtin.package:
+    name: "avahi-daemon"
+    state: latest
+    update_cache: yes
+
+- name: Disable avahi for IPv4
+  ansible.builtin.lineinfile:
+    path: /etc/avahi/avahi-daemon.conf
+    regexp: '^#?use-ipv4='
+    line: 'use-ipv4=no'
+    state: present
+
+- name: Configure avahi for IPv6
+  ansible.builtin.lineinfile:
+    path: /etc/avahi/avahi-daemon.conf
+    regexp: '^#?use-ipv6='
+    line: 'use-ipv6=yes'
+    state: present
