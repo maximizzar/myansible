@@ -1,0 +1,24 @@
+avahi_services:
+  - name: SSH
+    type: _ssh._tcp
+    port: 22
+    txt_records:
+      - description=Secure Shell Access
+
+  - name: Proxy 
+    type: _http._tcp
+    port: 80
+    txt_records:
+      - description=Web Proxy
+  
+  - name: Proxy
+    type: _https._tcp
+    port: 443
+    txt_records:
+      - description=Web Proxy Secure
+
+  - name: DNS
+    type: _dns._udp
+    port: 53
+    txt_records:
+      - description=Domain Name System Resolver
