@@ -1,6 +1,5 @@
-- name: Build the webvault
-  hosts: local
+- name: Install distributed vaultwarden Setup
+  hosts: vaultwarden
   roles:
-    - vaultwarden
-      vars:
-        vaultwarden_build: true
+    - name: docker
+      become: yes
