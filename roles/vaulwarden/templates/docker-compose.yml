@@ -1,0 +1,39 @@
+name: 'vaultwarden'
+
+networks:
+  default:
+    enable_ipv6: true
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 'fdca:fe31:e2f1::/48'
+
+  database:
+    environment:
+      MYSQL_ROOT_PASSWORD: '{{ vaultwarden_MYSQL_ROOT_PASSWORD }}'
+      MYSQL_DATABASE: '{{ vaultwarden_MYSQL_DATABASE }}'
+      MYSQL_USER: '{{ vaultwarden_MYSQL_USER }}'
+      MYSQL_PASSWORD: '{{ MYSQL_PASSWORD }}'
+    image: 'mariadb:latest'
+    ports:
+      - "3306:3306"
+    restart: 'unless-stopped'
+    volumes:
+      - 'database:/var/lib/mysql'
+      - './mysql.cnf:/etc/mysql/conf.d/mysql.cnf'
+
+ vault:
+    environment:
+      ADMIN_TOKEN: '{{ vaultwarden_ADMIN_TOKEN }}'
+    image: 'vaultwarden/server:latest'
+    restart: 'unless-stopped'
+    ports:
+      - "80:80"
+    volumes:
+      - 'vault:/data'
+
+volumes:
+  certificates:
+  database:
+  vault:
