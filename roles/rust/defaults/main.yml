@@ -1,0 +1,3 @@
+allow_become: false
+cargo_packages: 
+  - eza

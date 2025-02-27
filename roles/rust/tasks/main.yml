@@ -1,4 +1,5 @@
-- block:
+- name: Install or update toolchain (rustup)
+  block:
   - name: Try updating rustup (skip if not installed)
     command: rustup update
     register: rustup_update
@@ -32,3 +33,8 @@
   - name: Verify Cargo installation
     command: cargo --version
   become: false
+
+- name: Install or update packages (cargo)
+  community.general.cargo:
+    name: "{{ cargo_packages }}"
+    state: present
