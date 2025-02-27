@@ -1,8 +1,0 @@
----
-galaxy_info:
-  author: maximizzar
-  description: "A role that updates / installs rustup."
-  company: "maximizzar.io"
-  license: "AGPLv3"
-
-dependencies: []
