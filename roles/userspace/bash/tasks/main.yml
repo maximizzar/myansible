@@ -1,0 +1,33 @@
+- name: Basic Bash config
+  block:
+    - name: Install .bashrc
+      ansible.builtin.copy:
+        src: files/.bashrc
+        dest: "{{ ansible_env.HOME }}/.bashrc"
+        mode: '0600'
+        force: no
+
+    - name: Install .bash_aliases
+      ansible.builtin.copy:
+        src: files/.bash_aliases
+        dest: "{{ ansible_env.HOME }}/.bash_aliases"
+        mode: '0600'
+        force: no
+    
+    - name: Make sure ~/.bash_completion.d exists
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.bash_completion.d"
+        state: directory
+        mode: '0700'
+
+    - name: Add Completions
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ ansible_env.HOME }}/.bash_completion.d/{{ item | basename }}"
+        mode: '0600'
+        force: no
+      loop: "{{ query('fileglob', 'files/.bash_completion.d/*.sh') }}"
+
+- name: Source the .bashrc to reload environment variables
+  ansible.builtin.shell: ". ~/.bashrc"
+  

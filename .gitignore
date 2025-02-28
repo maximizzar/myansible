@@ -1,3 +1,4 @@
 # ---> Ansible
 *.retry
 inventory/hosts
+ansible.log

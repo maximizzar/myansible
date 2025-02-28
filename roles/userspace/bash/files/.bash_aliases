@@ -1,0 +1,1 @@
+/home/maximizzar/mybash/.bash/aliases
