@@ -1,0 +1,55 @@
+- name: Uninstall old versions
+  ansible.builtin.package:
+    name:
+      - firefox-esr
+    state: absent
+
+- name: Update APT cache
+  apt:
+    update_cache: yes
+
+- name: Download and save the Mozilla APT repository signing key
+  get_url:
+    url: "https://packages.mozilla.org/apt/repo-signing-key.gpg"
+    dest: "/etc/apt/keyrings/packages.mozilla.org.asc"
+    mode: '0644'
+
+- name: Get the GPG fingerprint of the Mozilla APT repository signing key
+  command: gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc
+  register: gpg_output
+  changed_when: false
+
+- name: Extract fingerprint and validate
+  shell: |
+    echo "{{ gpg_output.stdout }}" | awk '/pub/{getline; gsub(/^ +| +$/,""); 
+    if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") 
+      print "\nThe key fingerprint matches ("$0").\n"; 
+    else 
+      print "\nVerification failed: the fingerprint ("$0") does not match the expected one.\n"}'
+  register: fingerprint_check
+  changed_when: false
+
+- name: Fail if fingerprint verification fails
+  fail:
+    msg: "GPG fingerprint verification failed!"
+  when: "'Verification failed' in fingerprint_check.stdout"
+
+- name: Add the Mozilla APT repository to sources
+  ansible.builtin.lineinfile:
+    path: "/etc/apt/sources.list.d/mozilla.list"
+    line: "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main"
+    create: yes
+    mode: '0644'
+
+- name: Configure APT to prioritize packages from the Mozilla APT repository
+  ansible.builtin.copy:
+    dest: "/etc/apt/preferences.d/mozilla"
+    content: |
+      Package: *
+      Pin: origin packages.mozilla.org
+      Pin-Priority: 1000
+    mode: '0644'
+
+- name: Update APT cache
+  apt:
+    update_cache: yes

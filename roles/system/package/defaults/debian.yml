@@ -1,0 +1,15 @@
+system_packages:
+  - btop
+  - cargo
+  - cmake
+  - curl
+  - fastfetch
+  - gcc
+  - libssl-dev
+  - nala
+  - pkg-config
+  - python3
+  - pipx
+  - shellcheck
+  - wget
+  - zip

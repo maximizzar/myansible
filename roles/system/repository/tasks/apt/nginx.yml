@@ -1,0 +1,37 @@
+- name: Uninstall old versions
+  ansible.builtin.package:
+    name:
+      - nginx
+    state: absent
+  notify: Update APT cache
+
+- name: Download and save the NGINX APT repository signing key
+  ansible.builtin.get_url:
+    url: "https://nginx.org/keys/nginx_signing.key"
+    dest: "/tmp/nginx_signing.key"
+    mode: '0644'
+
+- name: Convert key to GPG format and store in keyring
+  ansible.builtin.command:
+    cmd: "gpg --dearmor -o /usr/share/keyrings/nginx-archive-keyring.gpg /tmp/nginx_signing.key"
+  args:
+    creates: "/usr/share/keyrings/nginx-archive-keyring.gpg"
+
+# TODO: add fingerprint validation!!!
+
+- name: Add the NGINX APT repository to sources
+  ansible.builtin.lineinfile:
+    path: "/etc/apt/sources.list.d/nginx.list"
+    line: "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu {{ ansible_distribution_release }} nginx"
+    create: yes
+    mode: '0644'
+
+- name: Configure APT to prioritize packages from the NGINX APT repository
+  ansible.builtin.copy:
+    dest: "/etc/apt/preferences.d/99nginx"
+    content: |
+      Package: *
+      Pin: origin nginx.org
+      Pin: release o=nginx
+      Pin-Priority: 900
+    mode: '0644'

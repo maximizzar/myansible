@@ -1,0 +1,24 @@
+system_repositories:
+  - mozilla
+
+additional_system_packages:
+  - firefox-devedition-l10n-de
+  - thunderbird-l10n-de
+
+additional_cargo_packages: 
+  - du-dust
+
+  - zellij
+  - mprocs
+
+  - bob-nvim
+  - gitui
+  - irust
+  - bacon
+
+  - speedtest-rs
+  - wiki-tui
+
+additional_pipx_packages:
+  - ansible
+

@@ -1,0 +1,9 @@
+- name: Merge pipx_packages and additional_pipx_packages
+  set_fact:
+    system_packages: "{{ pipx_packages + additional_pipx_packages | default([]) }}"
+
+- name: Install Pipx packages
+  community.general.pipx:
+    name: "{{ pipx_packages }}"
+    state: present
+    include_deps: true

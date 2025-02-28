@@ -1,8 +1,0 @@
----
-galaxy_info:
-  author: maximizzar
-  description: "A role that builds / updates / installs vaultwarden."
-  company: "maximizzar.io"
-  license: "AGPLv3"
-
-dependencies: []

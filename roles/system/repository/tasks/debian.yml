@@ -1,0 +1,29 @@
+- name: Prepare repository Installation
+  block:
+    - name: Create keyrings directory
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Install packages
+      ansible.builtin.package:
+        name: 
+          - ca-certificates
+          - curl
+          - debian-archive-keyring
+          - gnupg2
+          - wget
+    
+    - name: Ensure the APT preferences directory exists
+      ansible.builtin.file:
+        path: "/etc/apt/preferences.d"
+        state: directory
+        mode: '0755'
+    
+    - name: Run GPG to initialize keyring (example)
+      command: gpg --list-keys
+
+- name: Include custom task file for each repository
+  include_tasks: "apt/{{ item }}.yml"
+  loop: "{{ system_repositories | default([]) }}"

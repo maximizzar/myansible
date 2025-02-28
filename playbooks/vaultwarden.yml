@@ -1,5 +1,0 @@
-- name: Install distributed vaultwarden Setup
-  hosts: vaultwarden
-  roles:
-    - name: docker
-      become: yes

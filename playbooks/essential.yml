@@ -1,9 +1,14 @@
-- name: Essentials Playbook! Setup servers with basic tooling.
+- name: Essentials Playbook! Setup systems with basic tooling.
   hosts: all
-  tasks:
-    - name: Test connectivity to all hosts
-      ping:
-
   roles:
-    - role: sshd
-      when: ansible_host != 'localhost'
+    - name: system/repository
+      become: true
+
+    - name: system/package
+      become: true
+
+    - name: system/cargo
+      become: true
+
+    - name: system/pipx
+      become: false

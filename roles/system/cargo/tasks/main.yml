@@ -1,0 +1,8 @@
+- name: Merge cargo_packages and additional_cargo_packages
+  set_fact:
+    system_packages: "{{ cargo_packages + additional_cargo_packages | default([]) }}"
+
+- name: Install Cargo packages
+  community.general.cargo:
+    name: "{{ cargo_packages }}"
+    state: present

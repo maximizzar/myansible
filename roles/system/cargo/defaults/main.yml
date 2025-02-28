@@ -1,0 +1,13 @@
+cargo_packages:
+  - sccache
+
+  - nu
+  - coreutils
+  - starship
+
+  - eza
+  - bat
+  - ripgrep
+
+  - cargo-info
+  - cargo-update
